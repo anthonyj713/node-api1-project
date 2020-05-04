@@ -24,6 +24,9 @@ let users = [
 //middleware
 server.use(express.json()); //teaches the server to parse JSON from the body
 
+
+// let userId = users.length;
+
 //endpoints
 
 server.get('/', (req, res) => {
@@ -50,16 +53,22 @@ server.get('/api/users/:id', (req, res) => {
 });
 
 server.post('/api/users', (req, res) => {
-    
     const userInfo = req.body;
     userInfo.id = shortid.generate();
-
+ 
     users.push(userInfo);
     if(userInfo){
     res.status(201).json(users);
     } else {
     res.status(400).json({ errorMessage: 'Please provide name and bio for the user.'})
     }
+});
+
+server.delete('api/users/:id', (req, res) => {
+    const id = req.params.id;
+
+    users = users.filter(user => user.id != id)
+    res.status(200).json(users);
 })
 
 const port = 5000;
